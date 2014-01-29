@@ -22,6 +22,6 @@ public class SsssssnakeDuell {
     }
 
     private static void start() {
-        ApplicationStarter.run("Sneaky Snaky", new SnakeEnvironment());
+        ApplicationStarter.run("Snake Express", new SnakeEnvironment());
     }
 }

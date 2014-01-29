@@ -14,11 +14,13 @@ import static ssssssnake.duell.Direction.UP;
  */
 public class Snake {
     private ArrayList<Point> body;
-    private Direction direction = Direction.RIGHT; 
+    private Direction direction = Direction.RIGHT;
+    private int growthCounter;
 
     {
         body = new ArrayList<>();
     }
+    
     public void move(){
         //create a new location for the head using the direction
         int x = 0;
@@ -47,8 +49,15 @@ public class Snake {
         
         getBody().add(0, new Point(getHead().x + x, getHead().y + y));
         //delete tail
-        getBody().remove(getBody().size() - 1);
-    }
+        
+        System.out.println("GC b = " + getGrowthCounter());
+        if (getGrowthCounter() <= 0) {
+            getBody().remove(getBody().size() - 1);            
+        } else {
+            setGrowthCounter(getGrowthCounter() - 1);
+        }
+        System.out.println("GC a = " + getGrowthCounter());
+     }
     public Point getHead(){
         return getBody().get(0);
     }
@@ -80,6 +89,21 @@ public class Snake {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
+    /**
+     * @return the growthCounter
+     */
+    public int getGrowthCounter() {
+        return growthCounter;
+    }
+
+    /**
+     * @param growthCounter the growthCounter to set
+     */
+    public void setGrowthCounter(int growthCounter) {
+        this.growthCounter = growthCounter;
+    }
+
     
 }
 
