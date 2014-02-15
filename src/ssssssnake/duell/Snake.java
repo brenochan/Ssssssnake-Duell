@@ -50,13 +50,13 @@ public class Snake {
         getBody().add(0, new Point(getHead().x + x, getHead().y + y));
         //delete tail
         
-        System.out.println("GC b = " + getGrowthCounter());
+//        System.out.println("GC b = " + getGrowthCounter());
         if (getGrowthCounter() <= 0) {
             getBody().remove(getBody().size() - 1);            
         } else {
             setGrowthCounter(getGrowthCounter() - 1);
         }
-        System.out.println("GC a = " + getGrowthCounter());
+//        System.out.println("GC a = " + getGrowthCounter());
      }
     public Point getHead(){
         return getBody().get(0);
