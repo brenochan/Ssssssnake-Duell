@@ -150,7 +150,6 @@ public class GridObjects {
     public void setSoundResource(String soundResource) {
         this.soundResource = soundResource;
     }
-//</editor-fold>
 
     /**
      * @return the growthCounter
@@ -165,5 +164,6 @@ public class GridObjects {
     public void setGrowthCounter(int growthCounter) {
         this.growthCounter = growthCounter;
     }
+//</editor-fold>
 
 }

@@ -17,7 +17,7 @@ public class Snake {
     private ArrayList<Point> body;
     private Direction direction = Direction.RIGHT;
     private int growthCounter;
-    private Color color;
+    private Color color = Color.BLACK;
 
     {
         body = new ArrayList<>();
@@ -60,6 +60,18 @@ public class Snake {
         }
 //        System.out.println("GC a = " + getGrowthCounter());
      }
+    
+    public void changeColor(){
+        if (getColor() == Color.BLACK){
+            setColor(Color.BLUE);
+        } else if (getColor() == Color.BLUE){
+            setColor(Color.RED);
+        } else if (getColor() == Color.RED){
+            setColor(Color.BLACK);
+        }
+    }
+    
+    
     public Point getHead(){
         return getBody().get(0);
     }
