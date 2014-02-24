@@ -9,6 +9,6 @@ package ssssssnake.duell;
  * @author user
  */
 public enum GameState {
-    RUNNING, PAUSED, ENDED, SNEEZED
+    RUNNING, PAUSED, ENDED, SNEEZED, STARTUP,HIT_WALL,EAT_YOURSELF, HIGH_SCORE
     
 }

@@ -14,12 +14,14 @@ import java.util.ArrayList;
  */
 public class GridObjects {
 
-    public GridObjects(ArrayList<Point> cellCoordinates, int[] activeScores, int score, int badItemEaten, Image image) {
+    public GridObjects(ArrayList<Point> cellCoordinates, int[] activeScores, int score, int badItemEaten, Image image, String soundResource, int growthCounter) {
         this.cellCoordinates = cellCoordinates;
         this.activeScores = activeScores;
         this.score = score;
         this.badItemEaten = badItemEaten;
         this.image = image;
+        this.soundResource = soundResource;
+        this.growthCounter = growthCounter;
     }
 
 //<editor-fold defaultstate="collapsed" desc="Static Methods">
@@ -45,6 +47,7 @@ public class GridObjects {
     private int score;
     private int badItemEaten;
     private String soundResource = "";
+    private int growthCounter = 0;
 
     /**
      * @return the cellCoordinates
@@ -148,5 +151,19 @@ public class GridObjects {
         this.soundResource = soundResource;
     }
 //</editor-fold>
+
+    /**
+     * @return the growthCounter
+     */
+    public int getGrowthCounter() {
+        return growthCounter;
+    }
+
+    /**
+     * @param growthCounter the growthCounter to set
+     */
+    public void setGrowthCounter(int growthCounter) {
+        this.growthCounter = growthCounter;
+    }
 
 }

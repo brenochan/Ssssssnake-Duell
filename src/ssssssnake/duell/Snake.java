@@ -4,6 +4,7 @@
  */
 package ssssssnake.duell;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import static ssssssnake.duell.Direction.UP;
@@ -16,6 +17,7 @@ public class Snake {
     private ArrayList<Point> body;
     private Direction direction = Direction.RIGHT;
     private int growthCounter;
+    private Color color;
 
     {
         body = new ArrayList<>();
@@ -104,6 +106,34 @@ public class Snake {
         this.growthCounter = growthCounter;
     }
 
+    void grow(int growth) {
+        this.growthCounter += growth;
+    }
+
+    public boolean checkSelfHit(){
+        for (int i = 1; i < body.size(); i++) {
+            if (getHead().equals(body.get(i))) {
+                return true;
+                
+            }
+        }
+                    return false;
+
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @param color the color to set
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
     
 }
 

@@ -6,7 +6,6 @@ package ssssssnake.duell;
 
 import audio.AudioPlayer;
 import environment.Environment;
-import environment.GraphicsPalette;
 import environment.Grid;
 import image.ResourceTools;
 import java.awt.Color;
@@ -24,56 +23,107 @@ import java.util.ArrayList;
  */
 class SnakeEnvironment extends Environment {
 
-    private int[] orangesActive = {10, 19, 27, 35};
-    private GameState gameState = GameState.PAUSED;
+    private GameState gameState = GameState.STARTUP;
     private Grid grid;
     private int score = 0;
     private Snake snake;
-    private ArrayList<Point> apples;
-    private int delay = 3;
+    private int delay = 0;
     private int moveCounter = delay;
-    private Image burger;
-//    private ArrayList<Point> hamburgers;
     private GridObjectsCollection gridObjectsCollection;
+    private GridObjects apples;
+    private static final int[] activeAppleScores = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 81, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99};
+    private static final int APPLE_SCORE = 1;
+    private static final int APPLE_BAD_ITEM_EATEN = 0;
     private GridObjects hamburgers;
-    private static final int[] activeHamburgerScores = {0, 1, 3, 5, 17, 20, 30};
-    private static final int HAMBURGER_SCORE = 1;
-    private static final int HAMBURGER_BAD_ITEM_EATEN = 0;
+    private static final int[] activeHamburgerScores = {6, 17, 20, 30, 52, 68, 87};
+    private static final int HAMBURGER_SCORE = 0;
+    private static final int HAMBURGER_BAD_ITEM_EATEN = 1;
     private GridObjects fries;
-    private static final int[] activeFryScores = {0, 2, 4, 6, 9, 22, 39};
-    private static final int FRY_SCORE = -1;
-    private static final int FRY_BAD_ITEM_EATEN = 1;
-//    private Image Fries;
-//    private ArrayList<Point> frenchfries;
-    private Image banana;
-    private ArrayList<Point> bananas;
-    private Image coke;
-    private ArrayList<Point> cocacola;
-    private Image hotdog;
-    private ArrayList<Point> hotdogs;
-    private Image donut;
-    private ArrayList<Point> donuts;
-    private Image fish;
-    private ArrayList<Point> fishes;
-    private Image grape;
-    private ArrayList<Point> grapes;
-    private Image orange;
-    private ArrayList<Point> oranges;
-    private Image pizza;
-    private ArrayList<Point> pizzas;
-    private Image watermelon;
-    private ArrayList<Point> watermelons;
-    private Image strawberry;
-    private ArrayList<Point> strawberries;
-    private Image pineapple;
-    private ArrayList<Point> pineapples;
+    private static final int[] activeFryScores = {6, 9, 22, 39, 48, 78, 97};
+    private static final int FRY_SCORE = 0;
+    private static final int FRY_BAD_ITEM_EATEN = 2;
+    private GridObjects fish;
+    private static final int[] activeFishScores = {8, 20, 53, 69, 80};
+    private static final int FISH_SCORE = 2;
+    private static final int FISH_BAD_ITEM_EATEN = 0;
+    private GridObjects banana;
+    private static final int[] activeBananaScores = {5, 9, 14, 57, 63, 79, 92};
+    private static final int BANANA_SCORE = 2;
+    private static final int BANANA_BAD_ITEM_EATEN = 0;
+    private GridObjects coke;
+    private static final int[] activeCokeScores = {4, 28, 18, 43, 55, 70, 95};
+    private static final int COKE_SCORE = 0;
+    private static final int COKE_BAD_ITEM_EATEN = 1;
+    private GridObjects hotdog;
+    private static final int[] activeHotdogScores = {5, 12, 25, 43, 73, 92};
+    private static final int HOTDOG_SCORE = 0;
+    private static final int HOTDOG_BAD_ITEM_EATEN = 1;
+    private GridObjects donut;
+    private static final int[] activeDonutScores = {19, 35, 53, 73, 87};
+    private static final int DONUT_SCORE = 0;
+    private static final int DONUT_BAD_ITEM_EATEN = 3;
+    private GridObjects cake;
+    private static final int[] activeCakeScores = {7, 30, 47, 56, 80, 87};
+    private static final int CAKE_SCORE = 0;
+    private static final int CAKE_BAD_ITEM_EATEN = 3;
+    private GridObjects egg;
+    private static final int[] activeEggScores = {38, 52, 66, 76, 84, 92};
+    private static final int EGG_SCORE = 0;
+    private static final int EGG_BAD_ITEM_EATEN = 3;
+    private GridObjects itunes;
+    private static final int[] activeItunesScores = {4, 16, 29, 40, 52, 65, 73, 90};
+    private static final int ITUNES_SCORE = 3;
+    private static final int ITUNES_BAD_ITEM_EATEN = 0;
+    private GridObjects grape;
+    private static final int[] activeGrapeScores = {4, 8, 65, 76, 87, 11, 20, 29, 39, 52};
+    private static final int GRAPE_SCORE = 1;
+    private static final int GRAPE_BAD_ITEM_EATEN = 0;
+    private GridObjects orange;
+    private static final int[] activeOrangeScores = {3, 7, 10, 19, 26, 35, 47, 61, 72, 84, 91};
+    private static final int ORANGE_SCORE = 1;
+    private static final int ORANGE_BAD_ITEM_EATEN = 0;
+    private GridObjects pancakes;
+    private static final int[] activePancakesScores = {20, 34, 46, 58, 80, 93};
+    private static final int PANCAKES_SCORE = 0;
+    private static final int PANCAKES_BAD_ITEM_EATEN = 2;
+    private GridObjects pineapple;
+    private static final int[] activePineappleScores = {32, 35, 54, 65, 81, 95};
+    private static final int PINEAPPLE_SCORE = 3;
+    private static final int PINEAPPLE_BAD_ITEM_EATEN = 0;
+    private GridObjects pizza;
+    private static final int[] activePizzaScores = {11, 16, 21, 27, 42, 62, 82, 94, 98};
+    private static final int PIZZA_SCORE = 0;
+    private static final int PIZZA_BAD_ITEM_EATEN = 2;
+    private GridObjects radio;
+    private static final int[] activeRadioScores = {5, 6, 17, 18, 31};
+    private static final int RADIO_SCORE = 2;
+    private static final int RADIO_BAD_ITEM_EATEN = 0;
+    private GridObjects strawberries;
+    private static final int[] activeStrawberriesScores = {16, 29, 47, 66, 82};
+    private static final int STRAWBERRIES_SCORE = 3;
+    private static final int STRAWBERRIES_BAD_ITEM_EATEN = 0;
+    private GridObjects watermelon;
+    private static final int[] activeWatermelonScores = {12, 40, 56, 74};
+    private static final int WATERMELON_SCORE = 1;
+    private static final int WATERMELON_BAD_ITEM_EATEN = 0;
+    private GridObjects godlike;
+    private static final int[] activeGodlikeScores = {57, 58};
+    private static final int GODLIKE_SCORE = 3;
+    private static final int GODLIKE_BAD_ITEM_EATEN = 0;
+    private GridObjects dominating;
+    private static final int[] activeDominatingScores = {70, 71};
+    private static final int DOMINATING_SCORE = 2;
+    private static final int DOMINATING_BAD_ITEM_EATEN = 0;
+    private GridObjects unstopable;
+    private static final int[] activeUnstopableScores = {80, 82};
+    private static final int UNSTOPABLE_SCORE = 1;
+    private static final int UNSTOPABLE_BAD_ITEM_EATEN = 0;
     private int itemsEaten = 0;
-//    private int i;
-    private Image itunes;
-    private ArrayList<Point> itunes1;
-    private Image cake;
-    private ArrayList<Point> cakes;
     private Image gameover;
+    private Image boom;
+    private Image start;
+    private Image start2;
+    private Image snakecartoon;
 
     public SnakeEnvironment() {
     }
@@ -88,10 +138,6 @@ class SnakeEnvironment extends Environment {
         //this.grid.setCellHeight(20);
         //this.grid.setCellWidth(20);
         this.grid.setPosition(new Point(10, 70));
-        //apple
-        this.apples = new ArrayList<Point>();
-        this.apples.add(getRandomGridLocation());
-        //snake
         this.snake = new Snake();
         this.snake.getBody().add(new Point(5, 5));
         this.snake.getBody().add(new Point(5, 4));
@@ -99,85 +145,104 @@ class SnakeEnvironment extends Environment {
         this.snake.getBody().add(new Point(4, 3));
         this.snake.getBody().add(new Point(4, 2));
         this.snake.getBody().add(new Point(3, 2));
-
         gridObjectsCollection = new GridObjectsCollection();
-
+        //apples
+        apples = new GridObjects(generateRandomGridCellCoordinates(1), activeAppleScores, APPLE_SCORE, APPLE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/apple.png"), "/resources/apple.wav", 2);
+        gridObjectsCollection.addToCollection(apples);
         //burger
-//        int[] activeHamburgerScores = {0, 1, 3, 5, 17, 20, 30};
-        hamburgers = new GridObjects(generateRandomGridCellCoordinates(1), activeHamburgerScores, HAMBURGER_SCORE, HAMBURGER_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/burger.png"));
+        hamburgers = new GridObjects(generateRandomGridCellCoordinates(1), activeHamburgerScores, HAMBURGER_SCORE, HAMBURGER_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/burger.png"), "/resources/zombiebite.wav", 3);
         gridObjectsCollection.addToCollection(hamburgers);
-//        this.hamburgers = new ArrayList<Point>();
-//        this.hamburgers.add(getRandomGridLocation());
-//        this.burger = ResourceTools.loadImageFromResource("resources/burger.png");
-
         //fries
-        fries = new GridObjects(generateRandomGridCellCoordinates(1), activeFryScores, FRY_SCORE, FRY_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/fries.png"));
+        fries = new GridObjects(generateRandomGridCellCoordinates(1), activeFryScores, FRY_SCORE, FRY_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/fries.png"), "/resources/crunchbite.wav", 2);
         gridObjectsCollection.addToCollection(fries);
-
-        //        this.Fries = ResourceTools.loadImageFromResource("resources/fries.png");
-//        this.frenchfries = new ArrayList<Point>();
-//        this.frenchfries.add(getRandomGridLocation());
-
-//        //fish
-//        this.fish = ResourceTools.loadImageFromResource("resources/fish.png");
-//        this.fishes = new ArrayList<Point>();
-//        this.fishes.add(getRandomGridLocation());
-//        //strawberry
-//        this.strawberry = ResourceTools.loadImageFromResource("resources/strawberries.png");
-//        this.strawberries = new ArrayList<Point>();
-//        this.strawberries.add(getRandomGridLocation());
-//        //banana
-//        this.banana = ResourceTools.loadImageFromResource("resources/banana.png");
-//        this.bananas = new ArrayList<Point>();
-//        this.bananas.add(getRandomGridLocation());
+        //fish
+        fish = new GridObjects(generateRandomGridCellCoordinates(1), activeFishScores, FISH_SCORE, FISH_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/tilapia.png"), "/resources/apple.wav", 2);
+        gridObjectsCollection.addToCollection(fish);
+        //oranges
+        orange = new GridObjects(generateRandomGridCellCoordinates(1), activeOrangeScores, ORANGE_SCORE, ORANGE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/orange.png"), "/resources/apple.wav", 2);
+        gridObjectsCollection.addToCollection(orange);
+        //grape
+        grape = new GridObjects(generateRandomGridCellCoordinates(1), activeGrapeScores, GRAPE_SCORE, GRAPE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/grape.png"), "/resources/funnybite.wav", 2);
+        gridObjectsCollection.addToCollection(grape);
+        //banana
+        banana = new GridObjects(generateRandomGridCellCoordinates(1), activeBananaScores, BANANA_SCORE, BANANA_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/banana.png"), "/resources/apple.wav", 1);
+        gridObjectsCollection.addToCollection(banana);
+        //pineapple
+        pineapple = new GridObjects(generateRandomGridCellCoordinates(1), activePineappleScores, PINEAPPLE_SCORE, PINEAPPLE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/pineapple.png"), "/resources/apple.wav", 1);
+        gridObjectsCollection.addToCollection(pineapple);
+        //strawberry
+        strawberries = new GridObjects(generateRandomGridCellCoordinates(1), activeStrawberriesScores, STRAWBERRIES_SCORE, STRAWBERRIES_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/strawberries.png"), "/resources/wetbite.wav", 1);
+        gridObjectsCollection.addToCollection(strawberries);
+        //egg
+        egg = new GridObjects(generateRandomGridCellCoordinates(1), activeEggScores, EGG_SCORE, EGG_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/egg.png"), "/resources/apple.wav", 0);
+        gridObjectsCollection.addToCollection(egg);
+        //pizza
+        pizza = new GridObjects(generateRandomGridCellCoordinates(1), activePizzaScores, PIZZA_SCORE, PIZZA_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/pizza.png"), "/resources/apple.wav", 2);
+        gridObjectsCollection.addToCollection(pizza);
+        //pancakes
+        pancakes = new GridObjects(generateRandomGridCellCoordinates(1), activePancakesScores, PANCAKES_SCORE, PANCAKES_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/pancakes.png"), "/resources/apple.wav", 0);
+        gridObjectsCollection.addToCollection(pancakes);
+        //cake
+        cake = new GridObjects(generateRandomGridCellCoordinates(1), activeCakeScores, CAKE_SCORE, CAKE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/cake.png"), "/resources/funnybite.wav", 0);
+        gridObjectsCollection.addToCollection(cake);
+        //itunes
+        itunes = new GridObjects(generateRandomGridCellCoordinates(1), activeItunesScores, ITUNES_SCORE, ITUNES_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/itunes.png"), "/resources/apple.wav", 2);
+        gridObjectsCollection.addToCollection(itunes);
+        //radio
+        radio = new GridObjects(generateRandomGridCellCoordinates(1), activeRadioScores, RADIO_SCORE, RADIO_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/radio.png"), "/resources/apple.wav", 1);
+        gridObjectsCollection.addToCollection(radio);
+        //coke
+        coke = new GridObjects(generateRandomGridCellCoordinates(1), activeCokeScores, COKE_SCORE, COKE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/coke.png"), "/resources/slurp.wav", 3);
+        gridObjectsCollection.addToCollection(coke);
+        //dog
+        hotdog = new GridObjects(generateRandomGridCellCoordinates(1), activeHotdogScores, HOTDOG_SCORE, HOTDOG_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/dog.png"), "/resources/apple.wav", 3);
+        gridObjectsCollection.addToCollection(hotdog);
 //        //donut
-//        this.donut = ResourceTools.loadImageFromResource("resources/donut.png");
-//        this.donuts = new ArrayList<Point>();
-//        this.donuts.add(getRandomGridLocation());
+        donut = new GridObjects(generateRandomGridCellCoordinates(1), activeDonutScores, DONUT_SCORE, DONUT_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/donut.png"), "/resources/apple.wav", 0);
+        gridObjectsCollection.addToCollection(donut);
 //        //watermelon
-//        this.watermelon = ResourceTools.loadImageFromResource("resources/watermelon.png");
-//        this.watermelons = new ArrayList<Point>();
-//        this.watermelons.add(getRandomGridLocation());
-//        //coke
-//        this.cocacola = new ArrayList<Point>();
-//        this.cocacola.add(getRandomGridLocation());
-//        this.coke = ResourceTools.loadImageFromResource("resources/coke.png");
-//        //itunes
-//        this.itunes = ResourceTools.loadImageFromResource("resources/itunes.png");
-//        this.itunes1 = new ArrayList<Point>();
-//        this.itunes1.add(getRandomGridLocation());
-//        //hot dog
-//        this.hotdogs = new ArrayList<Point>();
-//        this.hotdogs.add(getRandomGridLocation());
-//        this.hotdog = ResourceTools.loadImageFromResource("resources/dog.png");
-//        //grapes
-//        this.grapes = new ArrayList<Point>();
-//        this.grapes.add(getRandomGridLocation());
-//        this.grape = ResourceTools.loadImageFromResource("resources/grape.png");
-//        //orange
-//        this.oranges = new ArrayList<Point>();
-//        this.oranges.add(getRandomGridLocation());
-//        this.orange = ResourceTools.loadImageFromResource("resources/orange.png");
-//        //pizza
-//        this.pizzas = new ArrayList<Point>();
-//        this.pizzas.add(getRandomGridLocation());
-//        this.pizza = ResourceTools.loadImageFromResource("resources/pizza.png");
-//        //pineapple
-//        this.pineapples = new ArrayList<Point>();
-//        this.pineapples.add(getRandomGridLocation());
-//        this.pineapple = ResourceTools.loadImageFromResource("resources/pineapple.png");
-//        //cake
-//        this.cakes = new ArrayList<Point>();
-//        this.cakes.add(getRandomGridLocation());
-//        this.cake = ResourceTools.loadImageFromResource("resources/cake.png");
+        watermelon = new GridObjects(generateRandomGridCellCoordinates(1), activeWatermelonScores, WATERMELON_SCORE, WATERMELON_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/watermelon.png"), "/resources/apple.wav", 1);
+        gridObjectsCollection.addToCollection(watermelon);
+        godlike = new GridObjects(generateRandomGridCellCoordinates(1), activeGodlikeScores, GODLIKE_SCORE, GODLIKE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/strawberries.png"), "/resources/godlike.wav", 1);
+        gridObjectsCollection.addToCollection(godlike);
+        dominating = new GridObjects(generateRandomGridCellCoordinates(1), activeDominatingScores, DOMINATING_SCORE, DOMINATING_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/banana.png"), "/resources/dominating.wav", 1);
+        gridObjectsCollection.addToCollection(dominating);
+        unstopable = new GridObjects(generateRandomGridCellCoordinates(1), activeUnstopableScores, UNSTOPABLE_SCORE, UNSTOPABLE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/apples.png"), "/resources/unstopable.wav", 1);
+        gridObjectsCollection.addToCollection(unstopable);
+        
         //gameover
         this.gameover = ResourceTools.loadImageFromResource("resources/game.png");
+        this.boom = ResourceTools.loadImageFromResource("resources/boom.png");
+        this.start = ResourceTools.loadImageFromResource("resources/start.png");
+        this.start2 = ResourceTools.loadImageFromResource("resources/start2.png");
+        this.snakecartoon = ResourceTools.loadImageFromResource("resources/snake.png");
+
 
     }
 
     //<editor-fold defaultstate="collapsed" desc="Grid Convenience Methods">
     private Point getRandomGridLocation() {
         return new Point((int) (Math.random() * this.grid.getColumns()), (int) (Math.random() * this.grid.getRows()));
+
+//        Point newRandomPoint = new Point(0, 0);
+//        boolean locationBlocked = true;
+//        do {
+//            newRandomPoint.setLocation(new Point((int) (Math.random() * this.grid.getColumns()), (int) (Math.random() * this.grid.getRows())));
+//
+//            for (GridObjects gridObjects : gridObjectsCollection.getCollection()) {
+//                for (int j = 0; j < gridObjects.size(); j++) {
+//                    if (newRandomPoint.equals(gridObjects.getCellCoordinates().get(j))) {
+//                        locationBlocked = true;
+//                        break blocked;
+//                    }
+//                }
+//            }
+//            blocked:
+//
+//        } while (locationBlocked);
+//
+//        return newRandomPoint;
+
     }
 
     public ArrayList<Point> generateRandomGridCellCoordinates(int numberOfCoordinates) {
@@ -212,13 +277,43 @@ class SnakeEnvironment extends Environment {
                 }
             }
         }
+        if (snake.getHead() != null) {
+            if (snake.getDirection() == Direction.RIGHT) {
+                if (snake.getHead().x >= this.grid.getColumns()) {
+                    snake.getHead().x = -3;
+                    gameState = GameState.HIT_WALL;
+                    AudioPlayer.play("/resources/car.wav");
+                }
+            }
+            if (snake.getDirection() == Direction.LEFT) {
+                if (snake.getHead().x <= -1) {
+                    gameState = GameState.HIT_WALL;
+                    AudioPlayer.play("/resources/car.wav");
+                }
+            }
+            if (snake.getDirection() == Direction.DOWN) {
+                if (snake.getHead().y >= this.grid.getRows()) {
+                    gameState = GameState.HIT_WALL;
+                    AudioPlayer.play("/resources/car.wav");
+                }
+            }
+            if (snake.getDirection() == Direction.UP) {
+                if (snake.getHead().y <= -1) {
+                    gameState = GameState.HIT_WALL;
+                    AudioPlayer.play("/resources/car.wav");
+
+                }
+            }
+        }
     }
 
     /**
      * @return the score
      */
     public int getScore() {
+
         return score;
+
     }
 
     /**
@@ -231,60 +326,21 @@ class SnakeEnvironment extends Environment {
     /**
      * @param score the score to set
      */
-//    public void setScore(int newScore, ObstacleType obstacleType) {
     public void setScore(int newScore) {
-
-//        switch (obstacleType) {
-//            case WATERMELONS:
-//                if (checkScoreLevel(this.score, newScore, 4)) { // should be 80
-//                    System.out.println("passed 4 boundary");
-//                } else if (checkScoreLevel(this.score, newScore, 8)) {  //shoud be 200
-//                    System.out.println("passed 8 boundary");
-//                } else if (checkScoreLevel(this.score, newScore, 12)) {  //shoud be 310
-//                    System.out.println("passed 8 boundary");
-//                }
-//                break;
-//
-//            case HAMBURGER:
-//
-//
-//                break;
-//
-//            case COKE:
-//
-//
-//                break;
-//
-//            case ITUNES:
-//
-//
-//                break;
-//
-//
-//
-//        }
         this.score = newScore;
-    }
+        if (this.score >= 100) {
+            this.gameState = GameState.HIGH_SCORE;
 
-    private boolean checkScoreLevel(int oldScore, int newScore, int scoreLevel) {
-        return ((oldScore < scoreLevel) && (newScore >= scoreLevel));
+        }
     }
 
     private void checkSnakeIntersection() {
-        //if the snake location is the same as any apple location
-        //then grow the snake and remove the apple
-        //later, move apple and make a sound and increase the score
-        for (int i = 0; i < this.apples.size(); i++) {
-            if (snake.getHead().equals(this.apples.get(i))) {
-                System.out.println("apple chomp");
 
-                this.apples.get(i).setLocation(getRandomGridLocation());
-                this.snake.setGrowthCounter(2);
-//                this.setScore(this.getScore() + 1, ObstacleType.APPLE);
-                addToScore(1);
+        if (snake.checkSelfHit()) {
+            this.gameState = GameState.EAT_YOURSELF;
+            AudioPlayer.play("/resources/fail.wav");
 
-                AudioPlayer.play("/resources/apple.wav");
-            }
+
         }
 
         for (GridObjects gridObjects : gridObjectsCollection.getActiveCollection(getScore())) {
@@ -295,254 +351,32 @@ class SnakeEnvironment extends Environment {
                     gridObjects.getCellCoordinates().get(j).setLocation(getRandomGridLocation()); //move the element that intersected with the snakes head
                     addToScore(gridObjects.getScore());  //increment the score
                     addToItemsEaten(gridObjects.getBadItemEaten());  //increment the 'bad item eaten' counter               
-                    //play a noise
+                    AudioPlayer.play(gridObjects.getSoundResource());//play a noise
+                    snake.grow(gridObjects.getGrowthCounter());
 
                 }
             }
         }
 
 
-//        for (int i = 0; i < hamburgers.size(); i++) {
-//            if (snake.getHead().equals(hamburgers.getCellCoordinates().get(i))) {
-//                this.hamburgers.getCellCoordinates().get(i).setLocation(getRandomGridLocation());
-//
-//                System.out.println("lol");
-//                this.setScore(this.getScore() - 10, ObstacleType.HAMBURGER);
-//                this.setItemsEaten(this.getItemsEaten() + 1);
-//                System.out.println("int = " + this.getItemsEaten());
-//            }
-//        }
-//
-//        for (int i = 0; i < this.frenchfries.size(); i++) {
-//            if (snake.getHead().equals(this.frenchfries.get(i))) {
-//                this.frenchfries.get(i).setLocation(getRandomGridLocation());
-//
-//                this.setScore(this.getScore() - 30, ObstacleType.FRENCH_FRY);
-//                this.setItemsEaten(this.getItemsEaten() + 1);
-//            }
-//        }
-//
-//        for (int i = 0; i < this.watermelons.size(); i++) {
-//            if (snake.getHead().equals(this.watermelons.get(i))) {
-//                this.setScore(this.getScore() + 2, ObstacleType.WATERMELONS);
-//            }
-//        }
-//
-//        for (int i = 0; i < this.cocacola.size(); i++) {
-//            if (snake.getHead().equals(this.cocacola.get(i))) {
-//                System.out.println("Ate Coka-cola");
-//
-//                this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                this.setItemsEaten(this.getItemsEaten() + 2);
-//
-//                AudioPlayer.play("/resources/slurp.wav");
-//            }
-
-//                if (this.getScore() == 4) {
-//                    System.out.println("HELP");
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 18) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 28) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 43) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 55) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 70) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 95) {
-//                    this.setItemsEaten(this.getItemsEaten() + 2);
-//                    AudioPlayer.play("/resources/slurp.wav");
-//                    this.cocacola.get(i).setLocation(getRandomGridLocation());
-//                }
-//        }
-//        }
-//        for (int i = 0; i < this.grapes.size(); i++) {
-//            if (snake.getHead().equals(this.grapes.get(i))) {
-//                this.grapes.get(i).setLocation(getRandomGridLocation());
-//                this.setScore(this.getScore() + 1, ObstacleType.GRAPE);
-//            }
-//        }
-
-        //BRENO - I don't understand this logic: why do you only want to increase 
-        // the score when you are at other scores?
-        // If this is because you want the grapes to only appear at certain times
-        // then you should use a boolean flag for "are the grapes visible?"
 
 
-//                if (this.getScore() == 4) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 8) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 11) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 20) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 29) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 39) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 52) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 65) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 76) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 87) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 98) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.grapes.get(i).setLocation(getRandomGridLocation());
-//                }
 
-//        for (int i = 0; i < this.oranges.size(); i++) {
-//            if (snake.getHead().equals(this.oranges.get(i))) {
-//                if (this.getScore() == 3) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 7) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 10) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 19) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 26) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 35) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                } else if (this.getScore() == 47) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 61) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 72) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 84) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                }else if (this.getScore() == 91) {
-//                    this.setScore(this.getScore() + 1);
-//                    this.oranges.get(i).setLocation(getRandomGridLocation());
-//                }
-//            }
-//        }
-//
-//        for (int i = 0; i < this.itunes1.size(); i++) {
-//            if (snake.getHead().equals(this.itunes1.get(i))) {
-//                
-//                
-//            }
-//        }
-//                if (this.getScore() == 40) {
-//                    this.setScore(this.getScore() + 30);
-//                    AudioPlayer.play("/resources/alejandro.wav");
-//                    //220
-//                } else if (this.getScore() == 130) {
-//                    AudioPlayer.play("/resources/alejandro.wav");
-//
-//                    this.setScore(this.getScore() + 30);
-//
-//                } else if (this.getScore() == 220) {
-//
-//                    this.setScore(this.getScore() + 30);
-//                }
 
-//        for (int i = 0;
-//                i
-//                < this.hotdogs.size();
-//                i++) {
-//            if (snake.getHead().equals(this.hotdogs.get(i))) {
-//                if (this.getScore() == 30) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//
-//                    this.setScore(this.getScore() - 30);
-//                } else if (this.getScore() == 120) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//
-//                    this.setScore(this.getScore() - 30);
-//                } else if (this.getScore() == 50) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//
-//                    this.setScore(this.getScore() - 30);
-//                }
-        //50,70,140
-//            }
-//        }
-//        for (int i = 0;
-//                i
-//                < this.donuts.size();
-//                i++) {
-//            if (snake.getHead().equals(this.donuts.get(i))) {
-//                if (this.getScore() == 250) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//                    this.setScore(this.getScore() - 20);
-//                } else if (this.getScore() == 70) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//                    this.setScore(this.getScore() - 20);
-//                } else if (this.getScore() == 140) {
-//                    this.setItemsEaten(this.getItemsEaten() + 1);
-//                    this.setScore(this.getScore() - 20);
-//                }
-//            }
-//        }
-//        for (int i = 0;
-//                i
-//                < this.pizzas.size();
-//                i++) {
-//            if (snake.getHead().equals(this.pizzas.get(i))) {
-//                if (this.getScore() == 40) {
-//                    this.setItemsEaten(this.getItemsEaten() + 3);
-//                } else if (this.getScore() == 130) {
-//                    this.setItemsEaten(this.getItemsEaten() + 3);
-//                } else if (this.getScore() == 170) {
-//                    this.setItemsEaten(this.getItemsEaten() + 3);
-//                } else if (this.getScore() == 230) {
-//                    this.setItemsEaten(this.getItemsEaten() + 3);
-//                }
-//            }
-//        }
+
+
     }
 
     @Override
     public void keyPressedHandler(KeyEvent e) {
-//        if (e.getKeyCode() == KeyEvent.VK_P) {
-//            this.setScore(this.getScore() + 2);
-//        }
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            this.setScore(this.getScore() + 80);
+        }
         //TOGGLE THE PAUSED/RUNNING STATE
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             if (gameState == GameState.RUNNING) {
                 gameState = GameState.PAUSED;
-            } else if (gameState == GameState.PAUSED) {
+            } else if ((gameState == GameState.STARTUP) || (gameState == GameState.PAUSED)) {
                 gameState = GameState.RUNNING;
             }
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -572,9 +406,7 @@ class SnakeEnvironment extends Environment {
         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             gameState = GameState.ENDED;
         }
-        // if(e.getKeyCode() == KeyEvent.VK_A{
-        //  snake.move();
-        //}
+
     }
 
     @Override
@@ -583,6 +415,7 @@ class SnakeEnvironment extends Environment {
 
     @Override
     public void environmentMouseClicked(MouseEvent e) {
+        
     }
 
     @Override
@@ -592,14 +425,10 @@ class SnakeEnvironment extends Environment {
         graphics.fillRect(5, 572, 887, 07);
         graphics.fillRect(2, 62, 07, 517);
         graphics.fillRect(892, 62, 07, 517);
-        
-        if (this.apples != null) {
-            for (int i = 0; i < this.apples.size(); i++) {
-                GraphicsPalette.drawApple(graphics, this.grid.getCellPosition(this.apples.get(i)), this.grid.getCellSize());
-            }
-        }
-        
-        
+
+
+//        
+
         //only draw the active objects (this will depend on the score)
         for (GridObjects gridObjects : gridObjectsCollection.getActiveCollection(getScore())) {
             for (int j = 0; j < gridObjects.size(); j++) {
@@ -607,22 +436,9 @@ class SnakeEnvironment extends Environment {
             }
         }
 
-        
-        
-//        //hamburger
-//        if (this.hamburgers != null) {
-//            for (int i = 0; i < this.hamburgers.size(); i++) {
-//                graphics.drawImage(burger, this.grid.getCellPosition(this.hamburgers.get(i)).x, this.grid.getCellPosition(this.hamburgers.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//            }
-//        }
-//        //fries
-//        if (this.frenchfries != null) {
-//            for (int i = 0; i < this.frenchfries.size(); i++) {
-//                graphics.drawImage(Fries, this.grid.getCellPosition(this.frenchfries.get(i)).x, this.grid.getCellPosition(this.frenchfries.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//            }
-//        }
-//        
-        
+
+
+
         if (this.grid != null) {
             this.grid.paintComponent(graphics);
             Point cellLocation;
@@ -664,126 +480,51 @@ class SnakeEnvironment extends Environment {
             graphics.drawString("x", 760, 50);
             graphics.drawString("x", 720, 50);
         }
-//        //watermelon
-//        if (this.getScore() == 3) {
-//            graphics.drawImage(watermelon, this.grid.getCellPosition(this.watermelons.get(i)).x, this.grid.getCellPosition(this.watermelons.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 8) {
-//            graphics.drawImage(watermelon, this.grid.getCellPosition(this.watermelons.get(i)).x, this.grid.getCellPosition(this.watermelons.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 310) {
-//            graphics.drawImage(watermelon, this.grid.getCellPosition(this.watermelons.get(i)).x, this.grid.getCellPosition(this.watermelons.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //coke
-//        if (this.getScore() == 4) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 18) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 28) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 43) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 55) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 70) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 95) {
-//            graphics.drawImage(coke, this.grid.getCellPosition(this.cocacola.get(i)).x, this.grid.getCellPosition(this.cocacola.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //orange
-//        if (this.getScore() == 3) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 7) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 10) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 19) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 26) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 35) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 47) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 61) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 72) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 84) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 91) {
-//            graphics.drawImage(orange, this.grid.getCellPosition(this.oranges.get(i)).x, this.grid.getCellPosition(this.oranges.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //itunes
-//        if (this.getScore() == 3) {
-//            graphics.drawImage(itunes, this.grid.getCellPosition(this.itunes1.get(i)).x, this.grid.getCellPosition(this.itunes1.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 130) {
-//            graphics.drawImage(itunes, this.grid.getCellPosition(this.itunes1.get(i)).x, this.grid.getCellPosition(this.itunes1.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 220) {
-//            graphics.drawImage(itunes, this.grid.getCellPosition(this.itunes1.get(i)).x, this.grid.getCellPosition(this.itunes1.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //hotdog
-//        if (this.getScore() == 30) {
-//            graphics.drawImage(hotdog, this.grid.getCellPosition(this.hotdogs.get(i)).x, this.grid.getCellPosition(this.hotdogs.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 50) {
-//            graphics.drawImage(hotdog, this.grid.getCellPosition(this.hotdogs.get(i)).x, this.grid.getCellPosition(this.hotdogs.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 120) {
-//            graphics.drawImage(hotdog, this.grid.getCellPosition(this.hotdogs.get(i)).x, this.grid.getCellPosition(this.hotdogs.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //donut
-//        if (this.getScore() == 250) {
-//            graphics.drawImage(donut, this.grid.getCellPosition(this.donuts.get(i)).x, this.grid.getCellPosition(this.donuts.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 70) {
-//            graphics.drawImage(donut, this.grid.getCellPosition(this.donuts.get(i)).x, this.grid.getCellPosition(this.donuts.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 140) {
-//            graphics.drawImage(donut, this.grid.getCellPosition(this.donuts.get(i)).x, this.grid.getCellPosition(this.donuts.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //pizza
-//        if (this.getScore() == 40) {
-//            graphics.drawImage(pizza, this.grid.getCellPosition(this.pizzas.get(i)).x, this.grid.getCellPosition(this.pizzas.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 130) {
-//            graphics.drawImage(pizza, this.grid.getCellPosition(this.pizzas.get(i)).x, this.grid.getCellPosition(this.pizzas.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 170) {
-//            graphics.drawImage(pizza, this.grid.getCellPosition(this.pizzas.get(i)).x, this.grid.getCellPosition(this.pizzas.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 230) {
-//            graphics.drawImage(pizza, this.grid.getCellPosition(this.pizzas.get(i)).x, this.grid.getCellPosition(this.pizzas.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //grapes
-//        if (this.getScore() == 4) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 8) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 11) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 20) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 29) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 39) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 52) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 65) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 76) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 87) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 98) {
-//            graphics.drawImage(grape, this.grid.getCellPosition(this.grapes.get(i)).x, this.grid.getCellPosition(this.grapes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-//        //cake
-//        if (this.getScore() == 60) {
-//            graphics.drawImage(cake, this.grid.getCellPosition(this.cakes.get(i)).x, this.grid.getCellPosition(this.cakes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 260) {
-//            graphics.drawImage(cake, this.grid.getCellPosition(this.cakes.get(i)).x, this.grid.getCellPosition(this.cakes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 200) {
-//            graphics.drawImage(cake, this.grid.getCellPosition(this.cakes.get(i)).x, this.grid.getCellPosition(this.cakes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        } else if (this.getScore() == 330) {
-//            graphics.drawImage(cake, this.grid.getCellPosition(this.cakes.get(i)).x, this.grid.getCellPosition(this.cakes.get(i)).y, this.grid.getCellSize().x, this.grid.getCellSize().y, this);
-//        }
-        if (gameState == GameState.ENDED) {
-            graphics.drawImage(gameover, 20, 80, 850, 450, this);
+
+        if (gameState == GameState.EAT_YOURSELF) {
+            graphics.drawImage(gameover, 20, 80, 800, 350, this);
             graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
-            graphics.drawString("BUD", 700, 507);
+            graphics.drawString("Do you try to eat yourself this often?", 100, 507);
+        }
+        if (gameState == GameState.ENDED) {
+            graphics.drawImage(gameover, 20, 80, 800, 350, this);
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 25));
+            graphics.drawString("HEY! HEY! CHILL BUD, THIS WAY YOU ARE GONNA GET FAT", 20, 507);
+        }
+        if (gameState == GameState.PAUSED) {
+
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
+            graphics.setColor(Color.BLACK);
+            graphics.drawString("PRESS SPACE TO CONTINUE", 50, 207);
+        }
+        if (gameState == GameState.STARTUP) {
+            graphics.setColor(new Color(124, 205, 124));
+            graphics.fillRect(0, 0, 300, 580);
+            graphics.fillRect(0, 60, 900, 520);
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 65));
+            graphics.setColor(Color.black);
+            graphics.fillRect(0, 60, 900, 520);
+            graphics.setColor(Color.green);
+
+            graphics.drawImage(start2, 240, 80, 500, 350, this);
+            graphics.drawString("CLICK", 395, 382);
+
+            graphics.drawImage(start, 240, 80, 500, 400, this);
+        }
+        if (gameState == GameState.HIT_WALL) {
+            graphics.drawImage(boom, 10, 100, 400, 320, this);
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
+            graphics.drawString(" Crashed into a wall!", 450, 257);
+            graphics.drawString(" Are you blind, BUD?", 450, 287);
+
+        }
+        if (gameState == GameState.HIGH_SCORE) {
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
+            graphics.drawString("Congratulations!", 300, 257);
+            graphics.drawString("You just Maxed out on points.", 300, 287);
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 14));
+            graphics.drawString("Made by: Breno Chan", 300, 310);
+            graphics.drawString("Teacher: Kevin Lawrence", 300, 327);
 
         }
     }
@@ -804,11 +545,16 @@ class SnakeEnvironment extends Environment {
             this.gameState = GameState.ENDED;
         }
     }
-    
+
     /**
      * @param items the itemsEaten to set
      */
     public void addToItemsEaten(int items) {
-        setItemsEaten( this.itemsEaten + items);
+        setItemsEaten(this.itemsEaten + items);
+        if (this.itemsEaten >= 3) {
+            this.gameState = GameState.ENDED;
+
+
+        }
     }
 }
