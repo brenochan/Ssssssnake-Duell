@@ -124,7 +124,14 @@ class SnakeEnvironment extends Environment {
     private Image boom;
     private Image start;
     private Image start2;
-    private Image snakecartoon;
+    private Image redsnake;
+        private Image blacksnake;
+
+    private Image greensnake;
+    private Image yellowsnake;
+    private Image brownsnake;
+    private Image bluesnake;
+    private CountDownTimer timer;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Initialize">
@@ -208,13 +215,23 @@ class SnakeEnvironment extends Environment {
         unstopable = new GridObjects(generateRandomGridCellCoordinates(1), activeUnstopableScores, UNSTOPABLE_SCORE, UNSTOPABLE_BAD_ITEM_EATEN, ResourceTools.loadImageFromResource("resources/apples.png"), "/resources/unstopable.wav", 1);
         gridObjectsCollection.addToCollection(unstopable);
 
+
+        this.timer = new CountDownTimer();
+
         //gameover
         this.gameover = ResourceTools.loadImageFromResource("resources/game.png");
         this.boom = ResourceTools.loadImageFromResource("resources/boom.png");
         this.start = ResourceTools.loadImageFromResource("resources/start.png");
         this.start2 = ResourceTools.loadImageFromResource("resources/start2.png");
-        this.snakecartoon = ResourceTools.loadImageFromResource("resources/snake.png");
+        this.redsnake = ResourceTools.loadImageFromResource("resources/redsnake.png");
+        this.brownsnake = ResourceTools.loadImageFromResource("resources/brownsnake.png");
+        this.bluesnake = ResourceTools.loadImageFromResource("resources/bluesnake.png");
+        this.greensnake = ResourceTools.loadImageFromResource("resources/greensnake.png");
+        this.yellowsnake = ResourceTools.loadImageFromResource("resources/yellowsnake.png");
+        this.blacksnake = ResourceTools.loadImageFromResource("resources/blacksnake.png");
 
+
+        setGameState(GameState.STARTUP);
 
     }
     //</editor-fold>
@@ -246,7 +263,9 @@ class SnakeEnvironment extends Environment {
     public void timerTaskHandler() {
         if (this.getGameState() == GameState.RUNNING) {
 
-            if (snake != null) {
+            if (this.timer.getSecondsRemaining() <= 0) {
+                setGameState(GameState.TIMER_OVER);
+            } else if (snake != null) {
                 if (moveCounter <= 0) {
                     snake.move();
                     moveCounter = delay;
@@ -322,6 +341,7 @@ class SnakeEnvironment extends Environment {
                     addToItemsEaten(gridObjects.getBadItemEaten());  //increment the 'bad item eaten' counter               
                     AudioPlayer.play(gridObjects.getSoundResource());//play a noise
                     snake.grow(gridObjects.getGrowthCounter());
+                    timer.reset();
 
                 }
             }
@@ -428,6 +448,8 @@ class SnakeEnvironment extends Environment {
 
         graphics.setFont(new Font("Calibri", Font.BOLD, 30));
         graphics.drawString("Score: " + this.getScore(), 50, 50);
+        graphics.drawString("" + this.timer.getSecondsRemaining(), 250, 40);
+
         graphics.setFont(new Font("stencil", Font.BOLD, 30));
         graphics.drawString("nake         press ", 400, 47);
         graphics.setFont(new Font("WIDE LATIN", Font.BOLD, 65));
@@ -462,6 +484,18 @@ class SnakeEnvironment extends Environment {
             graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
             graphics.drawString("Do you try to eat yourself this often?", 100, 507);
         }
+
+
+        if (getGameState() == GameState.TIMER_OVER) {
+            graphics.drawImage(gameover, 20, 80, 800, 350, this);
+//            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 25));
+            graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 34));
+
+            graphics.drawString("WAY TO SLOW! TIME IS MONEY, BUD.", 100, 507);
+
+//            graphics.drawString("HEY! HEY! CHILL BUD, THIS WAY YOU ARE GONNA GET FAT", 20, 507);
+        }
+
         if (getGameState() == GameState.ENDED) {
             graphics.drawImage(gameover, 20, 80, 800, 350, this);
             graphics.setFont(new Font("COMIC AS SUNS", Font.BOLD, 25));
@@ -483,6 +517,7 @@ class SnakeEnvironment extends Environment {
             graphics.setColor(Color.green);
             graphics.drawImage(start2, 390, 80, 540, 390, this);
             graphics.drawString("CLICK", 550, 400);
+            graphics.drawImage(bluesnake, 100, 0, 540, 440, this);
 
             graphics.drawImage(start, 390, 80, 540, 440, this);
         }
@@ -502,6 +537,7 @@ class SnakeEnvironment extends Environment {
             graphics.drawString("Teacher: Kevin Lawrence", 300, 327);
 
         }
+
     }
 
     /**
@@ -549,13 +585,20 @@ class SnakeEnvironment extends Environment {
 
             if (newGameState == GameState.HIT_WALL) {
                 AudioPlayer.play("/resources/car.wav");
+                timer.stop();
             } else if (newGameState == GameState.STARTUP) {
                 resetSnakePosition();
-
                 this.score = 0;
                 this.itemsEaten = 0;
+                timer.reset();
             } else if (newGameState == GameState.EAT_YOURSELF) {
                 AudioPlayer.play("/resources/fail.wav");
+            } else if (newGameState == GameState.RUNNING) {
+                timer.start();
+            } else if (newGameState == GameState.PAUSED) {
+                timer.stop();
+            } else if (newGameState == GameState.TIMER_OVER) {
+                timer.stop();
             }
 
         }
